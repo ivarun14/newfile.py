@@ -43,7 +43,7 @@ except ImportError:
     from reportlab.lib import colors
 
 # -------------------------------------------------------------------
-# RENDER DUMMY WEB SERVER (To prevent "Application exited early")
+# RENDER DUMMY WEB SERVER
 # -------------------------------------------------------------------
 PORT = int(os.environ.get("PORT", 10000))
 
@@ -58,7 +58,6 @@ def run_web_server():
         print(f"Web server running on port {PORT}")
         httpd.serve_forever()
 
-# Background thread me web server start kar rahe hain
 threading.Thread(target=run_web_server, daemon=True).start()
 
 # -------------------------------------------------------------------
@@ -457,6 +456,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.error(f"Stats error: {e}")
 
 def main():
+    global app
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     conv_handler = ConversationHandler(
@@ -487,8 +487,8 @@ def main():
     app.add_handler(CallbackQueryHandler(admin_callback, pattern="^(approve|reject)_"))
     app.add_handler(CommandHandler("stats", stats))
 
-logger.info("🤖 Gemini-Powered ₹99 Astrologer Bot is running...")
-app.run_polling()
+    logger.info("🤖 Gemini-Powered ₹99 Astrologer Bot is running...")
+    app.run_polling()
 
-if __name__== "__main__":
+if __name__ == "__main__":
     main()
